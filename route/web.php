@@ -34,6 +34,11 @@ class Route
 		require 'application/controller/AboutController.php';
 	}
 
+	public function admin()
+	{
+		require 'application/controller/AdminController.php';
+	}
+
 	public function __call($req, $res)
 	{
 		echo "Not found method";

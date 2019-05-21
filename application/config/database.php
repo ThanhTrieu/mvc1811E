@@ -29,6 +29,12 @@ class Database
 		try {
 		    $dbh = new PDO('mysql:host=localhost;dbname=lphp1811e;charset=utf8', 'root', ''); 
 
+		    // giup hien thi sai cu phap sql
+		    // luu y : chi su dung o moi truong dev thoi
+		    // tren moi truong production ko dung nua
+		    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    		$dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
 		    return $dbh;
 		} catch (PDOException $e) {
 		    print "Error!: " . $e->getMessage() . "<br/>";
