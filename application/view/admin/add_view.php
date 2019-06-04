@@ -4,6 +4,17 @@
 		<div class="row">
 			<div class="col-lg-12 col-xl-12">
 				<h2 class="text-center">Form add Admin</h2>
+
+				<?php if($errorAddData): ?>
+					<ul>
+						<?php foreach($errorAddData as $err): ?>
+							<?php if($err): ?>
+								<li style="color: red;"><?= $err; ?></li>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+
 				<form action="?c=admin&m=handleAdd" method="POST" class="mt-5">
 					 <div class="form-group">
 					    <label for="txtUser">Username</label>
