@@ -33,6 +33,7 @@ class AboutController extends Controller
 	}
 }
 
+
 $about = new AboutController;
 $m = $_GET['m'] ?? 'index';
 $about->$m();

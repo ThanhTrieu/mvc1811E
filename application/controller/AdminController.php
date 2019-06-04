@@ -50,8 +50,28 @@ class AdminController extends Controller
 
 	public function handleAdd()
 	{
-		if(isset($_POST[''])){
+		if(isset($_POST['btnAdd'])){
 
+			// lay du lieu tu form gui len
+			$username = $_POST['user'] ?? '';
+			$username = strip_tags($username);
+
+			$pass = $_POST['password'] ?? '';
+			$pass = strip_tags($pass);
+
+			$email = $_POST['email'] ?? '';
+			$email = strip_tags($email);
+
+			$phone = $_POST['phone'] ?? '';
+			$phone = strip_tags($phone);
+
+			$role = $_POST['role'] ?? '';
+			$role = is_numeric($role) ? $role : '';
+
+			$address = $_POST['address'] ?? '';
+
+			// validate du lieu truoc khi insert vao database
+			// kiem tra cac du lieu tu form gui len co hop le hay ko (can cu vao trong thiet ke database)
 		}
 	}
 }
