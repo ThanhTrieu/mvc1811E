@@ -18,13 +18,120 @@ class AdminController extends Controller
 		$this->db = new AdminModel;
 	}
 
+	public function delete()
+	{
+		if(isset($_POST['btnDelete'])){
+			$idAdmin = $_POST['idAdmin'] ?? '';
+			$idAdmin = is_numeric($idAdmin) ? $idAdmin : 0;
+
+			$del = $this->db->deleteAdminById($idAdmin);
+			if($del){
+				header('Location:?c=admin&state=oke');
+			} else {
+				header('Location:?c=admin&state=fail');
+			}
+		}
+	}
+
+	public function handleEdit()
+	{
+		if(isset($_POST['btnEdit'])){
+			// lay cac du lieu tu form gui len
+			$username = $_POST['user'] ?? '';
+			$username = strip_tags($username);
+
+			$pass = $_POST['password'] ?? '';
+			$pass = strip_tags($pass);
+
+			$email = $_POST['email'] ?? '';
+			$email = strip_tags($email);
+
+			$phone = $_POST['phone'] ?? '';
+			$phone = strip_tags($phone);
+
+			$role = $_POST['role'] ?? '';
+			$role = is_numeric($role) ? $role : '';
+
+			$address = $_POST['address'] ?? '';
+
+			$status = $_POST['status'] ?? '';
+			$status = is_numeric($status) ? $status : '';
+
+			$id = $_GET['id'] ?? '';
+			$id = is_numeric($id) ? $id : 0;
+
+			// validate du lieu truoc khi update
+			// de cho cac ban ve lam
+			
+			// kiem tra xem nguoi dung thay doi username hoac email da ton tai trong db hay chua?
+			// neu da ton tai khong cho sua - update theo gia tri day
+			// nguoc lai cho sua - update theo gia tri do
+			$checkEdit = $this->db->checkEditUserEmailAdmin($username, $email, $id);
+			if($checkEdit){
+				// khong cho update
+				header("Location:?c=admin&m=edit&state=err&id=".$id);
+			} else {
+				// cho update
+				$up = $this->db->updateDataAdminById($username, $pass, $email, $phone, $role, $address, $status, $id);
+				if($up){
+					// update thanh cong
+					header("Location:?c=admin&state=success");
+				} else {
+					// update ko thanh cong
+					header("Location:?c=admin&m=edit&state=fail&id=".$id);
+				}
+			}
+		}
+	}
+
+	public function edit()
+	{
+		$id = $_GET['id'] ?? '';
+		$id = is_numeric($id) ? $id : 0;
+
+		// lay thong tin cua user admin do thong qua id cua no
+		$data = [];
+		$infoAdmin = $this->db->getInfoDataById($id);
+		$data['info'] = $infoAdmin;
+		
+		// load header
+		$header = [
+			'title' => 'This is Admin page',
+			'content' => 'Admin - demo'
+		];
+		$this->loadHeader($header);
+
+		// load navbar
+		$this->loadNav();
+
+		if($infoAdmin){
+			$this->loadView('application/view/admin/edit_view', $data);
+		} else {
+			$this->loadView('application/view/admin/notfound_view');
+		}
+
+		// load footer
+		$this->loadFooter();
+	}
+
 	public function index()
 	{
 		$data = [];
-		$data['infoAdmins'] = $this->db->getAllDataInfoAdmin();
-		// echo "<pre>";
-		// print_r($data['infoAdmins']);
-		// die;
+		$keyword = $_GET['keyword'] ?? '';
+		$keyword = strip_tags($keyword);
+
+		$arrayLinks = [
+			'c' => 'admin',
+			'm' => 'index',
+			'page' => '{page}',
+			'keyword' => $keyword
+		];
+
+		$strLink = createLink($arrayLinks);
+		echo $strLink; die;
+
+		$data['infoAdmins'] = $this->db->getAllDataInfoAdmin($keyword);
+		$data['keyword'] = $keyword;
 
 		// load header
 		$header = [

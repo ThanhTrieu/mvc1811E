@@ -5,6 +5,12 @@
 			<div class="col-lg-12 col-xl-12">
 				<h2 class="text-center">This is admin</h2>
 				<a href="?c=admin&m=add" class="btn btn-primary"> Add Admin +</a>
+
+				<input type="text" class="ml-5" id="txtKeyword" value="<?= $keyword; ?>">
+				<button class="btn btn-info" id="btnSearch"> Search</button>
+
+				<a href="?c=admin" class="btn btn-primary">view all</a>
+				
 			</div>
 		</div>
 		<div class="row mt-5">
@@ -36,7 +42,10 @@
 								<a href="?c=admin&m=edit&id=<?= $item['id']; ?>" class="btn btn-info"> Edit</a>
 							</td>
 							<td>
-								<button class="btn btn-danger">Delete</button>
+								<form action="?c=admin&m=delete" method="post">
+									<input type="hidden" name="idAdmin" value="<?= $item['id']; ?>">
+									<button type="submit" class="btn btn-danger" name="btnDelete">Delete</button>
+								</form>
 							</td>
 						</tr>
 						<?php endforeach; ?>
@@ -46,3 +55,15 @@
 		</div>
 	</div>
 </main>
+<script type="text/javascript">
+	$(function(){
+		$('#btnSearch').click(function() {
+			let keyword = $('#txtKeyword').val().trim();
+			if(keyword.length > 2){
+				window.location.href = "?c=admin&m=index&keyword=" + keyword;
+			}else {
+				alert(' nhap tu khoa vao');
+			}
+		});
+	});
+</script>

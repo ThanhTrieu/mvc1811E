@@ -9,6 +9,7 @@
 	<title><?= $title; ?></title>
 	<link rel="stylesheet" href="public/css/bootstrap.min.css">
 
+	<script src="public/js/jquery-3.4.1.min.js" type="text/javascript"></script>
 </head>
 <body>
 	<header class="py-5 bg-dark">
