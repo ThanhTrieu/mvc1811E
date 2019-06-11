@@ -119,6 +119,8 @@ class AdminController extends Controller
 		$data = [];
 		$keyword = $_GET['keyword'] ?? '';
 		$keyword = strip_tags($keyword);
+		$page = $_GET['page'] ?? '';
+		$page = (is_numeric($page) && $page > 0) ? $page : 1;
 
 		$arrayLinks = [
 			'c' => 'admin',
@@ -128,10 +130,19 @@ class AdminController extends Controller
 		];
 
 		$strLink = createLink($arrayLinks);
-		echo $strLink; die;
 
-		$data['infoAdmins'] = $this->db->getAllDataInfoAdmin($keyword);
+		//$data['infoAdmins'] = $this->db->getAllDataInfoAdmin($keyword);
+		$infoAdmins = $this->db->getAllDataInfoAdmin($keyword);
 		$data['keyword'] = $keyword;
+		$totRecord = count($infoAdmins);
+
+		// goi ham phan trang
+		$arrPanigation = panigation($strLink, $totRecord, $page, 1, $keyword);
+
+		$data['infoAdmins'] = $this->db->getDataInfoAdminByPage($arrPanigation['start'], $arrPanigation['limit'], $arrPanigation['keyword']);
+
+		// hien thi phan trang ra ngoai view html
+		$data['panigation'] = $arrPanigation['panigation'];
 
 		// load header
 		$header = [

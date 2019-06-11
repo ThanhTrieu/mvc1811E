@@ -15,6 +15,27 @@ class AdminModel extends Database
 		// ben duoi nay se la cac logic cua __construct lop con ma chung ta can dinh nghia - xu ly
 	}
 
+	public function getDataInfoAdminByPage($start, $rows, $keyword = '')
+	{
+		$key = "%".$keyword."%";
+		$data = [];
+		$sql = "SELECT * FROM admin AS a WHERE a.username LIKE :username OR a.email LIKE :email LIMIT :start, :rows";
+		$stmt = $this->db->prepare($sql);
+		if($stmt){
+			$stmt->bindParam(':username', $key, PDO::PARAM_STR);
+			$stmt->bindParam(':email', $key, PDO::PARAM_STR);
+			$stmt->bindParam(':start', $start, PDO::PARAM_INT);
+			$stmt->bindParam(':rows', $rows, PDO::PARAM_INT);
+			if($stmt->execute()){
+				if($stmt->rowCount() > 0){
+					$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				}
+			}
+			$stmt->closeCursor();
+		}
+		return $data;
+	}
+
 	public function updateDataAdminById($username, $pass, $email, $phone, $role, $address, $status, $id)
 	{
 		$flagUpdate = false;

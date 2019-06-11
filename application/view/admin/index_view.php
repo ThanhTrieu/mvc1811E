@@ -52,6 +52,11 @@
 					</tbody>
 				</table>
 			</div>
+			<!-- hien thi phan trang -->
+			<div class="mt-3 col-lg-12 col-xl-12">
+				<?= $panigation; ?>
+			</div>
+
 		</div>
 	</div>
 </main>

@@ -36,8 +36,10 @@ function createLink($data = [])
 	return "index.php" . $link;
 }
 
-function panigation($totalRecord, $currentPage, $rows, $keyword = '')
+function panigation($link, $totalRecord, $currentpage, $rows, $keyword = '')
 {
+	// $link : index.php?c=admin&m=index&page={page}&keyword=
+	
 	// 1 : tinh tong so trang : totolPage
 	$totolPage = ceil($totalRecord/$rows);
 	//2 : xac dinh lai pham vi cua currentpage
@@ -50,6 +52,44 @@ function panigation($totalRecord, $currentPage, $rows, $keyword = '')
 	$start = ($currentpage - 1) * $rows;
 
 	//4: tao template HTML phan trang - su dung component panigation cua bootstrap de lam teamplate
-	
+	$html = '';
+	$html .= "<nav>";
+	$html .= "<ul class='pagination'>";
+	if($currentpage > 1 && $currentpage <= $totolPage) {
+		// hien nut previous (quay ve trang truoc)
+		$html .= "<li class='page-item'>";
+		$html .= "<a class='page-link' href='".str_replace('{page}', ($currentpage - 1), $link)."'>Previous</a>";
+		$html .= "</li>";
+	}
+	// tao vong lap hien thi cac trang o giua (tu 1 -> totalpage)
+	for($i = 1; $i <= $totolPage; $i++){
+		// lam the nao de nguoi dung biet ho dang o trang nao
+		if($i == $currentpage){
+			// trang hien tai
+			$html .= "<li class='page-item active'>";
+			$html .= "<a class='page-link'>".$currentpage."</a>";
+			$html .= "</li>";
+		} else {
+			// nhung trang khac
+			$html .= "<li class='page-item'>";
+			$html .= "<a class='page-link' href='".str_replace('{page}', $i, $link)."'>".$i."</a>";
+			$html .= "</li>";
+		}
+	}
+	// xu ly nut next page (sang trang tiep theo)
+	if($currentpage < $totolPage && $currentpage >= 1){
+		$html .= "<li class='page-item'>";
+		$html .= "<a class='page-link' href='".str_replace('{page}', ($currentpage + 1), $link)."'> Next </a>";
+		$html .= "</li>";
+	}
+	$html .= "</ul>";
+	$html .= "</nav>";
+
+	return [
+		'start' => $start,
+		'limit' => $rows,
+		'keyword' => $keyword,
+		'panigation' => $html
+	];
 }
 
